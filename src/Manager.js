@@ -11,6 +11,7 @@ const Manager = (props) => {
       <Container maxWidth="sm">
         <div style={{ display: 'flex', justifyContent: 'center', margin: '0.5rem 0' }}>
           <Button size="large" variant="contained" color="primary" onClick={props.addTask}>
+            ADD NEW TASK 
             <AddIcon />
           </Button>
         </div>

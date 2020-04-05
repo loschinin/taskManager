@@ -16,8 +16,10 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import { makeStyles } from '@material-ui/core/styles'
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -39,7 +41,7 @@ const useStyles = makeStyles(theme => ({
   },
   secondaryHeading: {
     fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.secondary
   },
 }));
 
@@ -58,23 +60,23 @@ const Task = ({
   backgroundColor
 }) => {
 
-  const classes = useStyles()  
-  
-  
+  const classes = useStyles()
 
-  let ref = useRef(null)  
+
+
+  let ref = useRef(null)
   const [, drop] = useDrop({
     accept: 'task',
     hover(item, monitor) {
       if (!ref.current) {
         return
-      }      
+      }
       if (item.id === id) {
         return
       }
-      
-      const hoverBoundingRect = ref.current.getBoundingClientRect()      
-      
+
+      const hoverBoundingRect = ref.current.getBoundingClientRect()
+
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
       const clientOffset = monitor.getClientOffset()
@@ -84,82 +86,74 @@ const Task = ({
       }
       if (item.id > id && hoverClientY > hoverMiddleY) {
         return
-      }      
+      }
       moveTask(item.id, id)
       item.id = id
     },
   })
   const [{ opacity }, drag] = useDrag({
     item: { type: 'task', id },
-    collect: monitor => ({      
+    collect: monitor => ({
       opacity: monitor.isDragging() ? 0 : 1
-    }),    
+    }),
   })
 
 
-
-
-
-  
   drag(drop(ref))
 
   return (
-     
-      <ExpansionPanel ref={ref} className={classes.root} expanded={exp} style={{ backgroundColor, opacity }} >
-        <ExpansionPanelSummary className={classes.heading} >
-          <Button onClick={changeExp.bind(this, id, exp)}>
-            <ExpandMoreIcon />
-          </Button>
-          <TextField
-            placeholder="Write the new task title"
+
+    <ExpansionPanel ref={ref} className={classes.root} expanded={exp} style={{ backgroundColor, opacity }} >
+      <ExpansionPanelSummary className={classes.heading} >
+        <Button onClick={changeExp.bind(this, id, exp)}>
+          {exp ? <ChevronRightIcon /> : <ExpandMoreIcon />}
+        </Button>
+        <TextField
+          placeholder="Write the new task title"
+          onFocus={event => event.stopPropagation()}
+          onChange={editTitle.bind(this, id)}
+          value={title}
+          margin="normal"
+          className={classes.title}
+        />
+
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            variant="inline"
+            format="MM/dd/yyyy"
+            margin="normal"
+            value={date}
             onFocus={event => event.stopPropagation()}
-            onChange={editTitle.bind(this, id)}
-            value={title}
-            margin="normal"
-            className={classes.title}
+            onChange={changeDate.bind(this, id)}
+            animateYearScrolling
+            autoOk
+            KeyboardButtonProps={{
+              'aria-label': 'change date',
+            }}
+            className={classes.date}
           />
 
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              variant="inline"
-              format="MM/dd/yyyy"
-              margin="normal"
-              value={date}
-              onFocus={event => event.stopPropagation()}
-              onChange={changeDate.bind(this, id)}
-              animateYearScrolling
-              autoOk
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-              className={classes.date}
-            />
+        </MuiPickersUtilsProvider>
 
-          </MuiPickersUtilsProvider>
+        <Button
+          onClick={delTask.bind(this, id)}
+          color="secondary"
+        >
+          <CloseIcon />
+        </Button>
 
-          <Button
-            onClick={delTask.bind(this, id)}
-            color="secondary"
-          >
-            <CloseIcon />
-          </Button>
+      </ExpansionPanelSummary>
 
-        </ExpansionPanelSummary>
-
-        <ExpansionPanelDetails className={classes.secondaryHeading}>
-
-          <TextField
-            placeholder="and description"
-            onChange={editDesc.bind(this, id)}
-            value={desc}
-            multiline
-            margin="normal"
-            fullWidth
-          />
-
-
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+      {exp && <ExpansionPanelDetails className={classes.secondaryHeading}>
+        <TextField
+          placeholder="and description"
+          onChange={editDesc.bind(this, id)}
+          value={desc}
+          multiline
+          fullWidth
+        />
+      </ExpansionPanelDetails>}
+    </ExpansionPanel>
 
 
   )

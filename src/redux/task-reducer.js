@@ -1,8 +1,5 @@
 import update from 'immutability-helper'
 
-
-
-
 const ADD_TASK = 'ADD-TASK'
 const MOVE_TASK = 'MOVE-TASK'
 const EDIT_TITLE = 'EDIT-TITLE'
@@ -11,44 +8,52 @@ const DEL_TASK = 'DEL-TASK'
 const CHANGE_DATE = 'CHANGE-DATE'
 const CHANGE_EXP = 'CHANGE-EXP'
 
+//hardcoded default state values
+
+const yellow = 'LemonChiffon'
+const red = 'LightCoral'
+const green = 'Aquamarine'
+const desc = 'You may edit the task description. For instance: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the dummy text ever since the 1500s, when an unknownspecimen book.'
+
+// date variables
+const now = new Date()
+const d = now.getDate()
+const d3 = now.getDate() + 3
+const m = now.getMonth() + 1
+const y = now.getFullYear()
+const today = (m <= 9 ? '0' + m : m) + '/' + (d <= 9 ? '0' + d : d) + '/' + y
+const date3 = (m <= 9 ? '0' + m : m) + '/' + (d3 <= 9 ? '0' + d3 : d3) + '/' + y
+
 
 let fakeAPI = {
   tasks: [
     {
       id: 0,
-      title: 'Zero a cool',
-      desc: 'This is description. Lorem ipsum ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ',
-      date: '04/27/2020',
+      title: 'Red: Violated term',
+      desc: desc,
+      date: '03/27/2020',
       expanded: false,
-      color: 'white',
+      color: green,
     },
     {
       id: 1,
-      title: 'Write a cool JS',
-      desc: 'This is description. Lorem ipsum ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ',
-      date: '03/28/2020',
+      title: 'Yellow: Deadline < 3 days',
+      desc: desc,
+      date: today,
       expanded: false,
-      color: 'white',
+      color: green,
     },
     {
       id: 2,
-      title: 'Make it generic enough',
-      desc: 'This is description. Lorem ipsum ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ',
-      date: '04/30/2020',
+      title: 'Green: Deadline > 3 days',
+      desc: desc,
+      date: date3,
       expanded: false,
-      color: 'white',
-    },
-    {
-      id: 3,
-      title: 'Write README',
-      desc: 'This is description. Lorem ipsum ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ipsum  ',
-      date: '04/20/2020',
-      expanded: false,
-      color: 'white',
+      color: green,
     }
+
   ]
 }
-
 
 
 const taskReducer = (state = fakeAPI, action) => {
@@ -57,30 +62,19 @@ const taskReducer = (state = fakeAPI, action) => {
     tasks: [...state.tasks]
   }
 
-  const now = new Date()
-  const d = now.getDate()
-  const d3 = now.getDate() + 3
-  const m = now.getMonth() + 1
-  const y = now.getFullYear()
-  const today = (m <= 9 ? '0' + m : m) + '/' + (d <= 9 ? '0' + d : d) + '/' + y
-  const date3 = (m <= 9 ? '0' + m : m) + '/' + (d3 <= 9 ? '0' + d3 : d3) + '/' + y
-  const yellow = 'LemonChiffon'
-  const red = 'LightCoral'
-  const white = 'HoneyDew'
-
   switch (action.type) {
     case ADD_TASK:
       return {
         ...state,
-        tasks: [
+        tasks: [ ...state.tasks,
           {
             id: Math.floor(Math.random() * 1000),
             title: '',
             desc: '',
-            date: today,
+            date: date3,
             expanded: false,
-            color: yellow
-          }, ...state.tasks]
+            color: green
+          }]
       }
 
     case MOVE_TASK:      
@@ -131,7 +125,7 @@ const taskReducer = (state = fakeAPI, action) => {
             if ((date3 > action.d)) {
               return { ...t, date: action.d, color: yellow }
             }
-            return { ...t, date: action.d, color: white }
+            return { ...t, date: action.d, color: green }
 
           }
           return t
