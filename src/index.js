@@ -1,15 +1,26 @@
+import store from './redux/redux-store'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import { DndProvider } from 'react-dnd'
+import Backend from 'react-dnd-html5-backend'
+import ManagerContainer from './ManagerContainer';
+import { Provider } from 'react-redux'
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <DndProvider backend={Backend}>
+        <Provider store={store}>
+            <ManagerContainer />
+        </Provider>
+    </DndProvider>
+    , document.getElementById('root')
 );
+
+
+
+
+
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
