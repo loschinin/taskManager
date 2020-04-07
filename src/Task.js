@@ -62,8 +62,6 @@ const Task = ({
 
   const classes = useStyles()
 
-
-
   let ref = useRef(null)
   const [, drop] = useDrop({
     accept: 'task',
