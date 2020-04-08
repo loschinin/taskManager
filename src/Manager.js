@@ -5,12 +5,11 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
 const Manager = (props) => {
-
   return (
     <>
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <div style={{ display: 'flex', justifyContent: 'center', margin: '0.5rem 0' }}>
-          <Button size="large" variant="contained" color="primary" onClick={props.addTask}>
+          <Button disabled={props.tasks.filter(t => t.title === '').length >= 1} size="large" variant="contained" color="primary" onClick={props.addTask}>
             ADD NEW TASK 
             <AddIcon />
           </Button>
@@ -28,8 +27,10 @@ const Manager = (props) => {
             delTask={props.delTask}
             date={t.date}
             changeDate={props.changeDate}
-            changeExp={props.changeExp}
+            changeExp={props.changeExp}            
             exp={t.expanded}
+            changeCompleted={props.changeCompleted}
+            completed={t.completed}
             props={props}
             backgroundColor={t.color}
           />)}

@@ -7,11 +7,12 @@ const EDIT_DESK = 'EDIT-DESK'
 const DEL_TASK = 'DEL-TASK'
 const CHANGE_DATE = 'CHANGE-DATE'
 const CHANGE_EXP = 'CHANGE-EXP'
+const CHANGE_COMPLETED = 'CHANGE-COMPLETED'
 
 //hardcoded default state values
-
-const yellow = 'LemonChiffon'
 const red = 'LightCoral'
+const yellow = 'LemonChiffon'
+
 const green = 'Aquamarine'
 const desc = 'You may edit the task description. For instance: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the dummy text ever since the 1500s, when an unknownspecimen book.'
 
@@ -26,30 +27,33 @@ const date3 = (m <= 9 ? '0' + m : m) + '/' + (d3 <= 9 ? '0' + d3 : d3) + '/' + y
 
 
 let fakeAPI = {
-  tasks: [
+  tasks: [    
     {
-      id: 0,
+      id: 1,
       title: 'Red: Violated term',
       desc: desc,
       date: '03/27/2020',
       expanded: false,
       color: green,
+      completed: false
     },
     {
-      id: 1,
+      id: 2,
       title: 'Yellow: Deadline < 3 days',
       desc: desc,
       date: today,
       expanded: false,
       color: green,
+      completed: false
     },
     {
-      id: 2,
+      id: 3,
       title: 'Green: Deadline > 3 days',
       desc: desc,
       date: date3,
       expanded: false,
       color: green,
+      completed: false
     }
 
   ]
@@ -57,27 +61,37 @@ let fakeAPI = {
 
 
 const taskReducer = (state = fakeAPI, action) => {
+  
   let stateCopy = {
     ...state,
     tasks: [...state.tasks]
   }
 
+
+
+
+    
+
   switch (action.type) {
+
     case ADD_TASK:
-      return {
-        ...state,
-        tasks: [ ...state.tasks,
+console.log('add');
+
+        return {
+          ...state,
+          tasks: [...state.tasks,
           {
             id: Math.floor(Math.random() * 1000),
             title: '',
             desc: '',
             date: date3,
             expanded: false,
-            color: green
+            color: green,
+            completed: false
           }]
-      }
+        }      
 
-    case MOVE_TASK:      
+    case MOVE_TASK:
       return {
         ...state,
         tasks: update(stateCopy.tasks, {
@@ -143,6 +157,20 @@ const taskReducer = (state = fakeAPI, action) => {
         })
       }
 
+      case CHANGE_COMPLETED:
+      return {
+        ...state,
+        tasks: stateCopy.tasks.map((t, stateIndex) => {
+          if (stateIndex.toString() === action.id.toString() && action.completed === false) {
+            return { ...t, completed: true }
+          }
+          if (stateIndex.toString() === action.id.toString() && action.completed === true) {
+            return { ...t, completed: false }
+          }
+          return t          
+        })
+      }
+
     default:
       return {
         ...state,
@@ -175,6 +203,8 @@ export const delTask = (id) => ({ type: DEL_TASK, id })
 export const changeDate = (id, date, d) => ({ type: CHANGE_DATE, id, date, d })
 
 export const changeExp = (id, exp) => ({ type: CHANGE_EXP, id, exp })
+
+export const changeCompleted = (id, completed) => ({ type: CHANGE_COMPLETED, id, completed})
 
 
 export default taskReducer
