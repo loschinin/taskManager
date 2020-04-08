@@ -2,7 +2,6 @@ import React, { useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
 import { TextField, Checkbox } from '@material-ui/core'
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button'
 import CloseIcon from '@material-ui/icons/Close'
 
@@ -36,6 +35,11 @@ const useStyles = makeStyles(theme => ({
     width: '7rem',
     marginRight: '1rem',
   },
+  title: {
+    width: '17rem',
+    marginLeft: '1rem',
+    marginRight: '1rem',
+  },
   date: {
     width: '10rem',
     marginLeft: '1rem',
@@ -45,11 +49,9 @@ const useStyles = makeStyles(theme => ({
     width: '7rem',
     margin: '0 1rem',
   },
-  title: {
-    width: '15rem',
-    marginLeft: '1rem',
-    marginRight: '1rem',
-  },
+  check: {
+    width: '7rem',
+  },  
   secondaryHeading: {
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary
@@ -151,24 +153,17 @@ const Task = ({
         </MuiPickersUtilsProvider>
 
         <Button
-         className={classes.del}
+          className={classes.del}
           onClick={delTask.bind(this, id)}
           color="secondary"
         >
           <CloseIcon />
         </Button>
-        <Button>
-          <FormControlLabel
-            control={<Checkbox
-              onClick={changeCompleted.bind(this, id, completed)}
-              color="primary" />}
+        <Button className={classes.check} onClick={changeCompleted.bind(this, id, completed)}>
+          <Checkbox
             checked={completed}
-            label="Complete"
-            labelPlacement="bottom"
-          />
+            color="primary" />
         </Button>
-
-
 
 
       </ExpansionPanelSummary>
