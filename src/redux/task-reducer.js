@@ -75,7 +75,6 @@ const taskReducer = (state = fakeAPI, action) => {
   switch (action.type) {
 
     case ADD_TASK:
-console.log('add');
 
         return {
           ...state,
